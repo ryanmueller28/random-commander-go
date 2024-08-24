@@ -40,7 +40,7 @@ func (deck *Deck) AddCard(card *Card) {
 func getRandomCommander() *Card {
 	params := make(map[string]string)
 	params["is"] = "commander"
-	params["game"] = "paper"
+	//params["game"] = "paper"
 	sfCards, err := api.FetchCard(params, "random")
 	if err != nil {
 		fmt.Println(err)
@@ -78,7 +78,7 @@ func fetchSecondCommander(secondCommanderMechanic string) *Card {
 		return nil
 	}
 	params := make(map[string]string)
-	params["game"] = "paper"
+	//params["game"] = "paper"
 
 	if secondCommanderMechanic == "Choose a Background" {
 		params["oracle"] = "Choose a Background"
