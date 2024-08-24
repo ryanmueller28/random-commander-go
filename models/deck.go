@@ -91,9 +91,9 @@ func fetchSecondCommander(secondCommanderMechanic string) *Card {
 	} else if secondCommanderMechanic == "Friends forever" {
 		params["oracle"] = "Friends Forever"
 	} else if secondCommanderMechanic == "Time Lord Doctor" {
-		params["type_line"] = "Time Lord Doctor"
+		params["type"] = "Time Lord Doctor"
 	} else if secondCommanderMechanic == "Background" {
-		params["type_line"] = "Background"
+		params["type"] = "Background"
 	}
 
 	sfCards, err := api.FetchCard(params, "random")
