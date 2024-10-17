@@ -53,7 +53,6 @@ func FetchCard(queryParams map[string]string, additionalRoute string) (*[]Scryfa
 
 	// Check if it's a single card (no "data" field)
 	if _, found := rawResponse["data"]; !found {
-		fmt.Println("Response appears to be a single card")
 
 		var singleCard ScryfallCard
 		if err := json.Unmarshal(bodyBytes, &singleCard); err != nil {
@@ -83,10 +82,25 @@ func FetchCard(queryParams map[string]string, additionalRoute string) (*[]Scryfa
 
 func buildQueryString(params map[string]string) string {
 	var queryParts []string
+	groupWithParentheses := false
 
 	for key, value := range params {
-		queryParts = append(queryParts, fmt.Sprintf("%s:%s", url.QueryEscape(key), url.QueryEscape(value)))
+		// Split the value by spaces if it's a multi-word value
+		splitVal := strings.Fields(value)
+		if len(splitVal) > 1 {
+			groupWithParentheses = true
+			for v := range splitVal {
+				queryParts = append(queryParts, key+":"+splitVal[v])
+			}
+		} else {
+			// Escape single-word values normally
+			queryParts = append(queryParts, fmt.Sprintf("%s:%s", url.QueryEscape(key), url.QueryEscape(value)))
+		}
 	}
 
-	return strings.Join(queryParts, "&")
+	// Optionally wrap the query in parentheses
+	if groupWithParentheses {
+		return "(" + strings.Join(queryParts, " ") + ")"
+	}
+	return strings.Join(queryParts, " ")
 }
