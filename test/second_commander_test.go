@@ -6,10 +6,14 @@ import (
 	"testing"
 )
 
+func InitDeckService() *services.DeckService {
+	return &services.DeckService{}
+}
+
 func TestDoctorsCompanionReturnsNewDoctor(t *testing.T) {
 	//oracleText := "Doctor's Companion"
 	want := "Time Lord Doctor"
-	secondCmdr := services.FetchSecondCommander("Time Lord Doctor")
+	secondCmdr := InitDeckService().FetchSecondCommander("Time Lord Doctor")
 
 	if !strings.Contains(secondCmdr.TypeLine, want) {
 		t.Fatalf("Did not get a doctor")
@@ -18,7 +22,7 @@ func TestDoctorsCompanionReturnsNewDoctor(t *testing.T) {
 
 func TestDoctorReturnsDoctorsCompanion(t *testing.T) {
 	want := "Doctor's companion"
-	secondCmdr := services.FetchSecondCommander("Doctor's Companion")
+	secondCmdr := InitDeckService().FetchSecondCommander("Doctor's Companion")
 
 	if !strings.Contains(secondCmdr.OracleText, want) {
 		t.Fatalf("Did not get a doctor's companion")
@@ -27,7 +31,7 @@ func TestDoctorReturnsDoctorsCompanion(t *testing.T) {
 
 func TestChooseABackgroundReturnsBackground(t *testing.T) {
 	want := "Choose a Background"
-	secondCmdr := services.FetchSecondCommander("Choose a Background")
+	secondCmdr := InitDeckService().FetchSecondCommander("Choose a Background")
 
 	if !strings.Contains(secondCmdr.OracleText, want) {
 		t.Fatalf("Failed at getting a choose a background commander")
@@ -36,7 +40,7 @@ func TestChooseABackgroundReturnsBackground(t *testing.T) {
 
 func TestBackground(t *testing.T) {
 	want := "Background"
-	secondCmdr := services.FetchSecondCommander("Background")
+	secondCmdr := InitDeckService().FetchSecondCommander("Background")
 	if !strings.Contains(secondCmdr.TypeLine, want) {
 		t.Fatalf("Did not get a background commander")
 	}
@@ -44,7 +48,7 @@ func TestBackground(t *testing.T) {
 
 func TestPartner(t *testing.T) {
 	want := "Partner"
-	secondCmdr := services.FetchSecondCommander("Partner")
+	secondCmdr := InitDeckService().FetchSecondCommander("Partner")
 	if !strings.Contains(secondCmdr.OracleText, want) {
 		t.Fatalf("Did not get a partner commander")
 	}
@@ -52,7 +56,7 @@ func TestPartner(t *testing.T) {
 
 func TestFriendsForever(t *testing.T) {
 	want := "Friends Forever"
-	secondCmdr := services.FetchSecondCommander("Friends Forever")
+	secondCmdr := InitDeckService().FetchSecondCommander("Friends forever")
 	if !strings.Contains(secondCmdr.OracleText, want) {
 		t.Fatalf("Did not get a friend forever commander")
 	}
