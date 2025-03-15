@@ -22,7 +22,7 @@ func TestDoctorsCompanionReturnsNewDoctor(t *testing.T) {
 
 func TestDoctorReturnsDoctorsCompanion(t *testing.T) {
 	want := "Doctor's companion"
-	secondCmdr := InitDeckService().FetchSecondCommander("Doctor's Companion")
+	secondCmdr := InitDeckService().FetchSecondCommander("Doctor's companion")
 
 	if !strings.Contains(secondCmdr.OracleText, want) {
 		t.Fatalf("Did not get a doctor's companion")
@@ -55,7 +55,7 @@ func TestPartner(t *testing.T) {
 }
 
 func TestFriendsForever(t *testing.T) {
-	want := "Friends Forever"
+	want := "Friends forever"
 	secondCmdr := InitDeckService().FetchSecondCommander("Friends forever")
 	if !strings.Contains(secondCmdr.OracleText, want) {
 		t.Fatalf("Did not get a friend forever commander")
