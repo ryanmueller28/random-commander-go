@@ -94,3 +94,21 @@ func (s *DeckService) FetchSecondCommander(secondCommanderMechanic string) *mode
 	card := (*sfCards)[0]
 	return models.NewCardFromScryfall(&card)
 }
+
+func FetchBoardWipes(count int, colorIdentity string) []*models.Card {
+	boardWipes := []*models.Card{}
+	params := make(map[string]string)
+	params["oracletags"] = "board wipe"
+	params["commander"] = colorIdentity
+	for i := 0; i < count; i++ {
+		sfCards, err := api.FetchCard(params, "random")
+		if err != nil {
+			fmt.Println(err)
+		}
+		boardWipes = append(boardWipes, models.NewCardFromScryfall(&(*sfCards)[0]))
+	}
+	if boardWipes == nil {
+		return nil
+	}
+	return boardWipes
+}
