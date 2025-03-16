@@ -14,17 +14,31 @@ func (s *DeckService) NewDeck() *models.Deck {
 
 	commander := s.GetRandomCommander()
 
+	colorIdentity := commander.ColorIdentity
+
 	commanders = append(commanders, commander)
 
 	secondMechanics := s.DetermineMultipleCommanderMechanic(commander)
 	cmdr2 := s.FetchSecondCommander(secondMechanics)
 	if cmdr2 != nil {
 		commanders = append(commanders, cmdr2)
+		colorIdentity = append(colorIdentity, cmdr2.ColorIdentity...)
 	}
-	return &models.Deck{
+	deck := &models.Deck{
 		Commanders: commanders,
 		Cards:      []*models.Card{},
 	}
+
+	removalSpells := FetchRemovalSpells(10, strings.Join(colorIdentity, ""))
+	boardWipes := FetchBoardWipes(5, strings.Join(colorIdentity, ""))
+	cardAdvantageSpells := FetchCardAdvantageSpells(10, strings.Join(colorIdentity, ""))
+	rampSpells := FetchRampSpells(5, strings.Join(colorIdentity, ""))
+
+	deck.Cards = append(deck.Cards, removalSpells...)
+	deck.Cards = append(deck.Cards, boardWipes...)
+	deck.Cards = append(deck.Cards, cardAdvantageSpells...)
+	deck.Cards = append(deck.Cards, rampSpells...)
+	return deck
 }
 
 func (s *DeckService) GetRandomCommander() *models.Card {
@@ -96,19 +110,36 @@ func (s *DeckService) FetchSecondCommander(secondCommanderMechanic string) *mode
 }
 
 func FetchBoardWipes(count int, colorIdentity string) []*models.Card {
-	boardWipes := []*models.Card{}
+	return fetchCoreCategory(count, colorIdentity, "boardwipe")
+}
+
+func FetchCardAdvantageSpells(count int, colorIdentity string) []*models.Card {
+	return fetchCoreCategory(count, colorIdentity, "draw")
+}
+
+func FetchRemovalSpells(count int, colorIdentity string) []*models.Card {
+	return fetchCoreCategory(count, colorIdentity, "removal")
+}
+
+func FetchRampSpells(count int, colorIdentity string) []*models.Card {
+	return fetchCoreCategory(count, colorIdentity, "ramp")
+}
+
+func fetchCoreCategory(count int, colorIdentity string, cardFunction string) []*models.Card {
 	params := make(map[string]string)
-	params["oracletags"] = "board wipe"
+	params["function"] = cardFunction
 	params["commander"] = colorIdentity
+	cards := []*models.Card{}
+
 	for i := 0; i < count; i++ {
 		sfCards, err := api.FetchCard(params, "random")
 		if err != nil {
 			fmt.Println(err)
+			return nil
 		}
-		boardWipes = append(boardWipes, models.NewCardFromScryfall(&(*sfCards)[0]))
+		card := (*sfCards)[0]
+		cards = append(cards, models.NewCardFromScryfall(&card))
 	}
-	if boardWipes == nil {
-		return nil
-	}
-	return boardWipes
+
+	return cards
 }
