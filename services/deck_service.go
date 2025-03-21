@@ -30,8 +30,11 @@ func (s *DeckService) NewDeck() *models.Deck {
 	}
 
 	removalSpells := FetchRemovalSpells(10, strings.Join(colorIdentity, ""))
+
 	boardWipes := FetchBoardWipes(5, strings.Join(colorIdentity, ""))
+
 	cardAdvantageSpells := FetchCardAdvantageSpells(10, strings.Join(colorIdentity, ""))
+
 	rampSpells := FetchRampSpells(5, strings.Join(colorIdentity, ""))
 
 	deck.Cards = append(deck.Cards, removalSpells...)
@@ -44,7 +47,8 @@ func (s *DeckService) NewDeck() *models.Deck {
 func (s *DeckService) GetRandomCommander() *models.Card {
 	params := make(map[string]string)
 	params["is"] = "commander"
-	//params["game"] = "paper"
+	params["game"] = "paper"
+
 	sfCards, err := api.FetchCard(params, "random")
 	if err != nil {
 		fmt.Println(err)
@@ -129,6 +133,7 @@ func fetchCoreCategory(count int, colorIdentity string, cardFunction string) []*
 	params := make(map[string]string)
 	params["function"] = cardFunction
 	params["commander"] = colorIdentity
+	params["format"] = "commander"
 	cards := []*models.Card{}
 
 	for i := 0; i < count; i++ {

@@ -26,7 +26,7 @@ func FetchCard(queryParams map[string]string, additionalRoute string) (*[]Scryfa
 		apiUrl = baseUrl
 	}
 
-	fmt.Println("Fetching URL:", apiUrl)
+	//fmt.Println("Fetching URL:", apiUrl)
 
 	// Perform the GET request
 	response, err := http.Get(apiUrl)
